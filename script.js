@@ -24,6 +24,10 @@ const divide = function (x,y){
 }
 
 const operate = function(number1,number2,operator) {
+    if (number1 == 0 || number2 == 0 && operator == "/") {
+        alert("Don't break the mainframe dummy")
+        return 0
+    }
     if (operator == '+'){
         return add(number1,number2)
     } else if (operator == '-') {
@@ -38,8 +42,7 @@ const operate = function(number1,number2,operator) {
 const performOperation = function() {
     let result = operate(numbers.shift(), numbers.shift(),operators.shift());
     numbers.push(result)
-    resultDisplay.innerHTML = result;
-    console.log(numbers)
+    resultDisplay.innerHTML = result.toFixed(3);
 }
 
 const clear = function(){
@@ -55,6 +58,9 @@ const numberButtons = document.querySelectorAll('div.numberRow > button');
 numberButtons.forEach((button) => {
   button.addEventListener('click', () => {
     tempValue += button.id
+    console.log(tempValue)
+    console.log(numbers)
+
   });
 });
 
@@ -63,10 +69,12 @@ operatorButtons.forEach((button) => {
   button.addEventListener('click', () => {
     operators.push(button.textContent)
     // This is pushing even if tempValue empty
-    numbers.push(parseInt(tempValue))
-    tempValue = [];
-    console.log(numbers)
-    console.log(numbers.length)
+    
+    if(tempValue.length != 0){
+        numbers.push(parseInt(tempValue))
+        tempValue = [];
+    }
+    
     if(numbers.length > 1) {
         console.log("triggered")
         performOperation()
@@ -76,10 +84,14 @@ operatorButtons.forEach((button) => {
 
 const equalButton = document.querySelector("#equals")
 equalButton.addEventListener('click', () => {
-    numbers.push(parseInt(tempValue))
-    // This is pushing even if tempValue empty
-    tempValue = []
+    if(tempValue.length != 0){
+        numbers.push(parseInt(tempValue))
+        tempValue = [];
+    }
+
     performOperation()
+    console.log(numbers)
+    console.log(tempValue)
 });
 
 const clearButton = document.querySelector("#clear")
